@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+ * security.xml
+ *
+ * Copyright (C) 2017 Universidad de Sevilla
+ * 
+ * The use of this project is hereby constrained to the conditions of the 
+ * TDG Licence, a copy of which you may download from 
+ * http://www.tdg-seville.info/License.html
+ -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"	
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd		
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+    ">
+
+	<!-- Security infrastructure -->
+
+	<bean id="loginService" class="security.LoginService" />
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+
+	<!-- Access control -->
+
+	<security:http auto-config="true" use-expressions="true">
+		<security:intercept-url pattern="/" access="permitAll" /> 
+
+		<security:intercept-url pattern="/favicon.ico" access="permitAll" /> 
+		<security:intercept-url pattern="/images/**" access="permitAll" /> 
+		<security:intercept-url pattern="/scripts/**" access="permitAll" /> 
+		<security:intercept-url pattern="/styles/**" access="permitAll" /> 
+
+		<security:intercept-url pattern="/views/misc/index.jsp" access="permitAll" /> 
+		<security:intercept-url pattern="/legalAdvise/TermsAndConditions.do" access="permitAll" /> 
+		<security:intercept-url pattern="/legalAdvise/commercialRegister.do" access="permitAll" /> 
+		
+		
+		<security:intercept-url pattern="/security/login.do" access="permitAll" /> 
+		<security:intercept-url pattern="/security/loginFailure.do" access="permitAll" /> 
+
+		<security:intercept-url pattern="/welcome/index.do" access="permitAll" /> 
+		<security:intercept-url pattern="/customer/create.do" access="permitAll" /> 
+		<security:intercept-url pattern="/customer/edit.do" access="permitAll" /> 
+
+		<security:intercept-url pattern="/admin/banner/edit.do" access="hasRole('ADMIN')" /> 
+		<security:intercept-url pattern="/post/administrator/ban.do" access="hasRole('ADMIN')" />
+		<security:intercept-url pattern="/admin/comment/list.do" access="hasRole('ADMIN')" /> 
+		<security:intercept-url pattern="/admin/comment/ban.do" access="hasRole('ADMIN')" /> 
+
+		<security:intercept-url pattern="/profile/action-1.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/profile/action-2.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/profile/action-3.do" access="isAuthenticated()" /> 
+		
+		<security:intercept-url pattern="/message/delete.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/message/sent.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/message/received.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/message/display.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/message/chooseRecipient.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/message/chooseReply.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/message/create.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/message/reply.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/post/customer/list.do" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/customer/display.do" access="isAuthenticated()" /> 
+	
+		
+		<security:intercept-url pattern="/post/customer/create.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/post/customer/edit.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/post/customer/display.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/post/customer/allOffers.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/post/customer/allRequests.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/post/customer/myOffers.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/post/customer/myRequests.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/post/administrator/list.do" access="hasRole('ADMIN')" /> 
+		<security:intercept-url pattern="/customer/apply/applyForAPost.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/customer/apply/myApplies.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/customer/apply/listFromPost.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/customer/apply/accept.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/customer/apply/deny.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/post/customer/postSearch.do" access="hasRole('CUSTOMER')" /> 
+		<security:intercept-url pattern="/dashboard/administrator/dashboard.do" access="hasRole('ADMIN')" /> 
+		
+			<security:intercept-url pattern="/comment/customer/create.do" access="isAuthenticated()" /> 
+		
+		<security:intercept-url pattern="/**" access="hasRole('NONE')" />
+
+		<security:form-login 
+			login-page="/security/login.do"
+			password-parameter="password" 
+			username-parameter="username"
+			authentication-failure-url="/security/loginFailure.do" />
+
+		<security:logout 
+			logout-success-url="/" 
+			invalidate-session="true" />
+	</security:http>
+
+</beans>
